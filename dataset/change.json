@@ -1,0 +1,73 @@
+{
+	"name": "change",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "t_change.xls",
+				"container": "raw"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "id",
+				"type": "String"
+			},
+			{
+				"name": "ch_id",
+				"type": "String"
+			},
+			{
+				"name": "ch_changeId",
+				"type": "String"
+			},
+			{
+				"name": "ch_changeIdNum",
+				"type": "String"
+			},
+			{
+				"name": "ch_project",
+				"type": "String"
+			},
+			{
+				"name": "ch_branch",
+				"type": "String"
+			},
+			{
+				"name": "ch_topic",
+				"type": "String"
+			},
+			{
+				"name": "ch_authorAccountId",
+				"type": "String"
+			},
+			{
+				"name": "ch_createdTime",
+				"type": "String"
+			},
+			{
+				"name": "ch_updatedTime",
+				"type": "String"
+			},
+			{
+				"name": "ch_status",
+				"type": "String"
+			},
+			{
+				"name": "ch_mergeable",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

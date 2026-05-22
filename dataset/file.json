@@ -1,0 +1,45 @@
+{
+	"name": "file",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "t_file.xls",
+				"container": "raw"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "id",
+				"type": "String"
+			},
+			{
+				"name": "f_fileName",
+				"type": "String"
+			},
+			{
+				"name": "f_linesInserted",
+				"type": "String"
+			},
+			{
+				"name": "f_linesDeleted",
+				"type": "String"
+			},
+			{
+				"name": "f_revisionId",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,15 @@
+{
+	"name": "stlakehouselearning",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Enabled",
+			"editable": true
+		}
+	},
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "505fec6c-aabf-44b5-b2fa-bd5228f2456f",
+		"tenantId": "3767f8aa-e5b4-4c87-8232-166a9158ab8e"
+	}
+}

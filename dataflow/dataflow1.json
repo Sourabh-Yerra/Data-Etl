@@ -1,0 +1,87 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "history",
+						"type": "DatasetReference"
+					},
+					"name": "sourceHistory"
+				},
+				{
+					"dataset": {
+						"referenceName": "people",
+						"type": "DatasetReference"
+					},
+					"name": "sourcePeople"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "reviewer_leaderboard",
+						"type": "DatasetReference"
+					},
+					"name": "sinkLeaderboard"
+				}
+			],
+			"transformations": [
+				{
+					"name": "filter1"
+				},
+				{
+					"name": "joinPeople"
+				},
+				{
+					"name": "aggregateReviewers"
+				},
+				{
+					"name": "windowRank"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          id as string,",
+				"          hist_id as string,",
+				"          hist_message as string,",
+				"          hist_authorAccountId as string,",
+				"          hist_createdTime as string,",
+				"          hist_patchSetNum as string,",
+				"          hist_changeId as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> sourceHistory",
+				"source(output(",
+				"          id as string,",
+				"          p_accountId as string,",
+				"          p_name as string,",
+				"          p_email as string,",
+				"          p_userName as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> sourcePeople",
+				"sourceHistory filter(like(hist_message, '%Code-Review+2%') || like(hist_message, '%Approved%') || like(hist_message, '%APRV%')) ~> filter1",
+				"filter1, sourcePeople join(hist_authorAccountId == p_accountId,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> joinPeople",
+				"joinPeople aggregate(groupBy(hist_authorAccountId,",
+				"          p_name,",
+				"          p_email),",
+				"     approval_count = count(hist_id)) ~> aggregateReviewers",
+				"aggregateReviewers window(desc(approval_count, true),",
+				"     rank = rank()) ~> windowRank",
+				"windowRank sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sinkLeaderboard"
+			]
+		}
+	}
+}

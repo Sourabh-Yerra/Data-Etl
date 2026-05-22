@@ -1,0 +1,38 @@
+{
+	"name": "ds_sink_parquet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"fileName": {
+				"type": "string",
+				"defaultValue": "t_file"
+			},
+			"folderDate": {
+				"type": "string",
+				"defaultValue": "2026/05/14"
+			}
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@{dataset().fileName}.parquet",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@{dataset().folderDate}",
+					"type": "Expression"
+				},
+				"container": "curated"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

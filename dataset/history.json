@@ -1,0 +1,53 @@
+{
+	"name": "history",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "t_history.xls",
+				"container": "raw"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "id",
+				"type": "String"
+			},
+			{
+				"name": "hist_id",
+				"type": "String"
+			},
+			{
+				"name": "hist_message",
+				"type": "String"
+			},
+			{
+				"name": "hist_authorAccountId",
+				"type": "String"
+			},
+			{
+				"name": "hist_createdTime",
+				"type": "String"
+			},
+			{
+				"name": "hist_patchSetNum",
+				"type": "String"
+			},
+			{
+				"name": "hist_changeId",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

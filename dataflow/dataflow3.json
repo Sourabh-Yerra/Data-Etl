@@ -1,0 +1,78 @@
+{
+	"name": "dataflow3",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "file",
+						"type": "DatasetReference"
+					},
+					"name": "sourceFile"
+				},
+				{
+					"dataset": {
+						"referenceName": "change",
+						"type": "DatasetReference"
+					},
+					"name": "sourceChange"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "file_churn",
+						"type": "DatasetReference"
+					},
+					"name": "sinkChurn"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedChurn"
+				},
+				{
+					"name": "aggregate1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          id as string,",
+				"          f_fileName as string,",
+				"          f_linesInserted as string,",
+				"          f_linesDeleted as string,",
+				"          f_revisionId as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> sourceFile",
+				"source(output(",
+				"          id as string,",
+				"          ch_id as string,",
+				"          ch_changeId as string,",
+				"          ch_changeIdNum as string,",
+				"          ch_project as string,",
+				"          ch_branch as string,",
+				"          ch_topic as string,",
+				"          ch_authorAccountId as string,",
+				"          ch_createdTime as string,",
+				"          ch_updatedTime as string,",
+				"          ch_status as string,",
+				"          ch_mergeable as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> sourceChange",
+				"sourceFile derive(total_lines_changed = toInteger(f_linesInserted) + toInteger(f_linesDeleted)) ~> derivedChurn",
+				"derivedChurn aggregate(groupBy(f_fileName),",
+				"     total_churn = sum(total_lines_changed),",
+				"          change_count = count(f_revisionId)) ~> aggregate1",
+				"aggregate1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sinkChurn"
+			]
+		}
+	}
+}
